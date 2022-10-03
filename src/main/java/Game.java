@@ -4,11 +4,15 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 
 import java.io.IOException;
 
 public class Game {
     private Screen screen;
+    private int x = 10;
+    private int y = 10;
 
     public Game() {
         try {
@@ -27,12 +31,32 @@ public class Game {
 
     private void draw() throws IOException {
         this.screen.clear();
-        this.screen.setCharacter(10, 10, TextCharacter.fromCharacter('X')[0]);
+        this.screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
         this.screen.refresh();
+    }
+
+    private void processKey(KeyStroke key) throws IOException {
+        System.out.println(key);
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'w')
+            y -= 1;
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 's')
+            y += 1;
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'd')
+            x += 1;
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'a')
+            x -= 1;
     }
 
 
     public void run() throws IOException {
-        draw();
+        while (true) {
+            draw();
+            KeyStroke key = screen.readInput();
+            processKey(key);
+            if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q')
+                screen.close();
+            else if (key.getKeyType() == KeyType.EOF)
+                break;
+        }
     }
 }
