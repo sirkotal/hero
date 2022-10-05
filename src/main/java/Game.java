@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class Game {
     private Screen screen;
+    private Arena arena;
 
     Position position = new Position(10,10);
     Hero hero = new Hero(position);
@@ -26,6 +27,7 @@ public class Game {
             this.screen.setCursorPosition(null); // we don't need a cursor
             this.screen.startScreen(); // screens must be started
             this.screen.doResizeIfNecessary(); // resize screen if necessary
+            arena = new Arena(40,20);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -34,7 +36,7 @@ public class Game {
 
     private void draw() throws IOException {
         this.screen.clear();
-        hero.draw(screen);
+        arena.draw(screen);
         this.screen.refresh();
     }
 
@@ -43,15 +45,7 @@ public class Game {
     }
 
     private void processKey(KeyStroke key) throws IOException {
-        System.out.println(key);
-        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'w')
-            moveHero(hero.moveUp());
-        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 's')
-            moveHero(hero.moveDown());
-        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'd')
-            moveHero(hero.moveRight());
-        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'a')
-            moveHero(hero.moveLeft());
+        arena.processKey(key);
     }
 
 
