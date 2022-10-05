@@ -14,7 +14,8 @@ import java.io.IOException;
 public class Game {
     private Screen screen;
 
-    Hero hero = new Hero(10, 10);
+    Position position = new Position(10,10);
+    Hero hero = new Hero(position);
 
     public Game() {
         try {
@@ -37,16 +38,20 @@ public class Game {
         this.screen.refresh();
     }
 
+    private void moveHero(Position position) {
+        hero.setPosition(position);
+    }
+
     private void processKey(KeyStroke key) throws IOException {
         System.out.println(key);
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'w')
-            hero.moveUp();
+            moveHero(hero.moveUp());
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 's')
-            hero.moveDown();
+            moveHero(hero.moveDown());
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'd')
-            hero.moveRight();
+            moveHero(hero.moveRight());
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'a')
-            hero.moveLeft();
+            moveHero(hero.moveLeft());
     }
 
 
