@@ -15,9 +15,6 @@ public class Game {
     private Screen screen;
     private Arena arena;
 
-    Position position = new Position(10,10);
-    Hero hero = new Hero(position);
-
     public Game() {
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
@@ -36,12 +33,8 @@ public class Game {
 
     private void draw() throws IOException {
         this.screen.clear();
-        arena.draw(screen);
+        arena.draw(screen.newTextGraphics());
         this.screen.refresh();
-    }
-
-    private void moveHero(Position position) {
-        hero.setPosition(position);
     }
 
     private void processKey(KeyStroke key) throws IOException {
