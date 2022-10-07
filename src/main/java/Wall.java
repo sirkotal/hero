@@ -20,6 +20,6 @@ public class Wall extends Element {
 
     public void draw(TextGraphics graphics) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#D3D3D3"));
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), " ");  // graphics.putString(new TerminalPosition(position.getX(), position.getY()), " ");
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()), " ");
     }
 }
