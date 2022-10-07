@@ -10,6 +10,9 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 import java.io.IOException;
 
@@ -19,11 +22,14 @@ public class Arena {
 
     private Hero hero;
 
+    private List<Wall> walls;
+
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
         Position position = new Position(width/2, height/2);
         hero = new Hero(position);
+        this.walls = createWalls();
     }
 
     public void processKey(KeyStroke key) throws IOException {
@@ -38,6 +44,19 @@ public class Arena {
             moveHero(hero.moveLeft());
     }
 
+    private List<Wall> createWalls() {
+        List<Wall> walls = new ArrayList<>();
+        for (int c = 0; c < width; c++) {
+            walls.add(new Wall(c,0));
+            walls.add(new Wall(c,height - 1));
+        }
+        for (int r = 1; r < height - 1; r++) {
+            walls.add(new Wall(0,r));
+            walls.add(new Wall(width - 1,r));
+        }
+        return walls;
+    }
+
     public void moveHero(Position position) {
         if (canHeroMove(position)) {
             hero.setPosition(position);
@@ -50,6 +69,12 @@ public class Arena {
         if (position.getX() > width - 1) return false;
         if (position.getY() > height - 1) return false;
 
+        for (Wall wall : walls) {
+            if (wall.getPosition().getX() == position.getX() && wall.getPosition().getY() == position.getY()) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -57,5 +82,8 @@ public class Arena {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#000000"));   // #336699
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         hero.draw(graphics);
+        for (Wall wall : walls) {
+            wall.draw(graphics);
+        }
     }
 }
