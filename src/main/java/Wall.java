@@ -5,10 +5,9 @@ import com.googlecode.lanterna.TextColor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Wall {
-    private Position position;
+public class Wall extends Element {
     public Wall(int x, int y) {
-        position = new Position(x,y);
+        super(x,y);
     }
 
     public Position getPosition() {

@@ -5,11 +5,9 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
 
-public class Hero {
-    private Position position;
-
-    public Hero(Position position) {
-        this.position = position;
+public class Hero extends Element {
+    public Hero(int x, int y) {
+        super(x,y);
     }
 
     public Position getPosition() {

@@ -27,8 +27,7 @@ public class Arena {
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        Position position = new Position(width/2, height/2);
-        hero = new Hero(position);
+        hero = new Hero(width/2, height/2);
         this.walls = createWalls();
     }
 
