@@ -24,6 +24,8 @@ public class Arena {
 
     private Hero hero;
 
+    // private Position tile;
+
     private List<Wall> walls;
     private List<Coin> coins;
 
@@ -38,13 +40,13 @@ public class Arena {
         this.monsters = createMonsters();
     }
 
-    public boolean nheroTile(int x, int y) {
+    /*public boolean nheroTile(int x, int y) {
         Position heroic = hero.getPosition();
         if ((heroic.getX() == x) && (heroic.getY() == y)) {
             return false;
         }
         return true;
-    }
+    }*/
 
     public void processKey(KeyStroke key) throws IOException {
         System.out.println(key);
@@ -103,13 +105,24 @@ public class Arena {
     }
 
     private List<Coin> createCoins() {
+        int on = 0;
         Random random = new Random();
         ArrayList<Coin> coins = new ArrayList<>();
+        ArrayList<Position> full = new ArrayList<>();
+        full.add(hero.getPosition());
         for (int i = 0; i < 5; i++) {
             int x = random.nextInt(width - 2) + 1;
             int y = random.nextInt(height - 2) + 1;
-            if (nheroTile(x,y)) {
-                coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+            for (int j = 0; j < full.size(); j++) {
+                if ((x == full.get(j).getX()) && (y == full.get(j).getY())) {
+                    on = 1;
+                }
+                else {
+                    continue;
+                }
+            }
+            if (on == 0) {
+                coins.add(new Coin(x, y));
             }
             else {
                 i--;
