@@ -27,12 +27,23 @@ public class Arena {
     private List<Wall> walls;
     private List<Coin> coins;
 
+    private List<Monster> monsters;
+
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
         hero = new Hero(width/2, height/2);
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
+    }
+
+    public boolean nheroTile(int x, int y) {
+        Position heroic = hero.getPosition();
+        if ((heroic.getX() == x) && (heroic.getY() == y)) {
+            return false;
+        }
+        return true;
     }
 
     public void processKey(KeyStroke key) throws IOException {
@@ -47,6 +58,9 @@ public class Arena {
             moveHero(hero.moveLeft());
 
         retrieveCoins();
+        verifyMonsterCollisions();
+        moveMonsters();
+        verifyMonsterCollisions();
     }
 
     private List<Wall> createWalls() {
@@ -62,11 +76,45 @@ public class Arena {
         return walls;
     }
 
+    private List<Monster> createMonsters() {
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            monsters.add(new Monster(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+        }
+        return monsters;
+    }
+
+    private void moveMonsters() {
+        for (Monster monster : monsters) {
+            Position monsterPosition = monster.move();
+            if (canHeroMove(monsterPosition))
+                monster.setPosition(monsterPosition);
+        }
+    }
+
+
+    private void verifyMonsterCollisions() {
+        for (Monster monster : monsters)
+            if (hero.getPosition().equals(monster.getPosition())) {
+                System.out.println("Fatality!");
+                System.exit(0);
+            }
+    }
+
     private List<Coin> createCoins() {
         Random random = new Random();
         ArrayList<Coin> coins = new ArrayList<>();
-        for (int i = 0; i < 5; i++)
-            coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+        for (int i = 0; i < 5; i++) {
+            int x = random.nextInt(width - 2) + 1;
+            int y = random.nextInt(height - 2) + 1;
+            if (nheroTile(x,y)) {
+                coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+            }
+            else {
+                i--;
+            }
+        }
         return coins;
     }
 
@@ -108,6 +156,10 @@ public class Arena {
         }
         for (Coin coin : coins) {
             coin.draw(graphics);
+        }
+
+        for (Monster monster : monsters) {
+            monster.draw(graphics);
         }
     }
 }
